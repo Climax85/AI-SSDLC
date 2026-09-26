@@ -31,6 +31,7 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 | `codebase-design` | Vokabular-Referenz für `tdd` (deep modules, seams) |
 | `triage` | Triage-Rollen; `to-tickets`/`to-spec` labeln damit |
 | `setup-matt-pocock-skills` | Einmal-Setup pro Repo: Issue-Tracker, Triage-Labels, Domain-Docs |
+| `setup-secure-sdlc` | Einmal-Setup pro Repo (Orchestrator): installiert `docs/agents`-Konventionen aus Skill-Templates, mergt AGENTS.md, delegiert an `setup-matt-pocock-skills`, prüft App-Docs/CONVENTIONS |
 
 ### Konventions-Dokumente (`docs/agents/`)
 
@@ -42,19 +43,48 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 | `artefakt-erweiterung-to-spec-to-tickets.md` | Delta-Spezifikation für den Artefakt-Pass |
 | `secure-sdlc-konventionen.md` | Übergreifende SDLC-Konventionen |
 
-## Installation in ein Ziel-Repo
+## Skill-Installation (ein Befehl)
 
-1. **Skills kopieren** — den Inhalt von `skills/` nach `.pi/skills/` im Ziel-Repo (Claude Code: `.claude/skills/`).
-2. **Konventions-Dokumente kopieren** — `docs/agents/` in das Ziel-Repo (Pfade sind hart kodiert, z. B. greifen `secure-feature`/`code-review` auf `docs/agents/issue-tracker.md` zu).
-3. **AGENTS.md mergen** — die drei Abschnitte aus der Vorlage `AGENTS.md` in die AGENTS.md/CLAUDE.md des Ziel-Repos übernehmen und projektspezifisch anpassen.
-4. **Setup-Skill laufen lassen** — `/setup-matt-pocock-skills` interaktiv ausführen. Es *überschreibt* die mitgelieferten `docs/agents/*`-Dateien mit der getroffenen Konfiguration (Tracker-Wahl, Labels, Domain-Layout) — die mitgelieferten Dateien sind nur Referenz-Beispiele aus dem Ursprungsprojekt.
-5. **App-Docs initialisieren** — falls `docs/anwendungsdokumentation.md` fehlt: `/init-app-docs` (hartes Stop-Kriterium des Orchestrators).
-6. **Loslegen** — `/secure-feature <feature>` oder Ticket-Referenz.
+Das Repo ist ein pi-Package (`package.json` mit `pi.skills`) und folgt der Agent-Skills-Konvention (`skills/<name>/SKILL.md`) — alle 17 Skills sind name-/frontmatter-konform und werden von pi, oh-my-pi und opencode nativ entdeckt.
+
+**pi coding agent** — klont das Repo nach `~/.pi/agent/git/` und verlinkt es in den Einstellungen:
+
+```bash
+pi install git:github.com/Climax85/AI-SSDLC          # global (user-weit)
+pi install -l git:github.com/Climax85/AI-SSDLC       # projektweit (.pi/settings.json, wird vom Team geteilt)
+```
+
+**oh-my-pi (omp)** — gleiches Repo, eigene Plugin-Verwaltung:
+
+```bash
+omp install github:Climax85/AI-SSDLC
+# oder getagged:  omp install 'github:Climax85/AI-SSDLC#v1.0.0'
+```
+
+**opencode** — kein eigener Paketmanager; der Agent-Skills-CLI (Vercel) installiert in die jeweiligen Skill-Verzeichnisse und verwaltet Updates (Lockfile, `npx skills update`):
+
+```bash
+npx skills add Climax85/AI-SSDLC --skill '*' -a pi -a opencode -y        # Projekt-Scope
+npx skills add Climax85/AI-SSDLC --skill '*' -a pi -a opencode -y -g     # Global
+```
+
+> Tipp: omp und opencode lesen zusätzlich das universelle Verzeichnis `.agents/skills/` (projekt) bzw. `~/.agents/skills/` — pi ebenfalls. Ein Symlink dieses Repos dorthin funktioniert für alle drei Harnesses gleichzeitig und aktualisiert sich per `git pull` (unter Windows: `git config core.symlinks true` oder `npx skills add --copy`).
+
+Updates: `pi update --extensions` bzw. `pi update --all` (pi), Ref neu setzen via `omp install 'github:…#<neuer-ref>'` (omp), `npx skills update` (opencode/pi via CLI).
+
+## Einrichtung des Ziel-Repos (ein Befehl)
+
+Die Skills allein reichen nicht — die Workflow-Kette erwartet pro Ziel-Repo Konventions-Dokumente und App-Docs (hart kodierte Pfade in `skills/secure-feature`, `skills/code-review` u. a.). Das übernimmt der Setup-Skill:
+
+1. **`/skill:setup-secure-sdlc`** im Ziel-Repo ausführen. Er erkundet den Repo-Zustand, ruft `setup-matt-pocock-skills` auf (Tracker-Wahl, Triage-Labels, Domain-Layout inkl. `## Agent skills`-Block in AGENTS.md/CLAUDE.md), installiert danach die beiden Secure-SDLC-Konventions-Dateien aus seinen gebündelten Templates nach `docs/agents/`, ergänzt einen `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, klärt die CONVENTIONS-Entdeckung (`review-ticket`-Fallback ist ein C#-Beispiel) und prüft die App-Docs (`init-app-docs` wird delegiert bzw. als harte Voraussetzung gemeldet).
+2. **Loslegen** — `/skill:secure-feature <feature>` oder Ticket-Referenz.
+
+Idempotent: bereits gepflegte Dateien werden nicht still überschrieben. Der Skill warnt außerdem, falls das zentrale Artefakt-Template-Verzeichnis `templates/` im Ziel-Repo fehlt (Stop-Stelle von `secure-feature` §2 Setup).
 
 ## Projekt-spezifisch anzupassen
 
 - **`skills/review-ticket/templates/conventions/csharp.md`** — Beispiel-Conventions aus dem Ursprungsprojekt (C#/.NET 10, `AccessExportTool.*`-Namespaces). Für ein neues Projekt ersetzen; `review-ticket` kopiert diese Datei als Fallback-`CONVENTIONS.md` ans Repo-Root. Eine vorhandene `CONVENTIONS.md` wird nie überschrieben.
-- **`docs/agents/*`** — siehe Schritt 4: werden pro Repo generiert.
+- **`docs/agents/*`** — werden pro Repo von `setup-matt-pocock-skills` (drei Dateien) bzw. `setup-secure-sdlc` (zwei Dateien) generiert.
 - **Sprache der Artefakte** — Templates und Skills sind auf Deutsch (Projektkonvention des Ursprungsprojekts).
 
 ## Bewusst nicht enthalten
