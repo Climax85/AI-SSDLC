@@ -23,7 +23,7 @@ Vor jedem Schritt den Ausgangszustand lesen, nichts annehmen:
 - `AGENTS.md` / `CLAUDE.md` am Repo-Root: welche existiert, enthält sie bereits einen `## Agent skills`-Block oder einen `## Secure-SDLC`-Abschnitt?
 - `docs/anwendungsdokumentation.md`: existiert sie, trägt sie noch Template-Platzhalter?
 - `CONVENTIONS.md` am Repo-Root?
-- Skills-Verfügbarkeit: sind `setup-matt-pocock-skills`, `triage`, `secure-feature` und `init-app-docs` installiert (Skill-Liste bzw. Geschwister-Verzeichnisse dieses Skills)?
+- Skills-Verfügbarkeit: sind `setup-matt-pocock-skills`, `triage`, `secure-feature`, `init-app-docs` sowie `wayfinder` (nur Profil `groß` nötig) installiert (Skill-Liste bzw. Geschwister-Verzeichnisse dieses Skills)?
 
 Ergebnis dem Entwickler in fünf Zeilen zusammenfassen: vorhanden / fehlt / wird übersprungen.
 
@@ -74,6 +74,7 @@ Tabelle liefern (Datei | Status | geprüft gegen):
 - [ ] `## Agent skills`-Block und `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, keine Duplikate
 - [ ] `docs/anwendungsdokumentation.md` initialisiert
 - [ ] CONVENTIONS-Entscheidung getroffen (projektspezifisch oder Fallback)
+- [ ] `wayfinder` installiert oder Profil-`groß`-Fallback (breadth-first-Grilling) bewusst akzeptiert
 
 **Zusatzwarnung (kein Stop):** `secure-feature` erwartet zudem die zentralen Artefakt-Templates im `templates/`-Verzeichnis des Ziel-Repos (§2 Setup seiner SKILL.md). Fehlt das Verzeichnis, dort ebenfalls stoppt der Orchestrator — rechtzeitig anlegen (Templates sind Contracts, siehe `secure-sdlc-konventionen.md` §4).
 
@@ -84,4 +85,5 @@ Dem Entwickler abschließend sagen, dass alle Konventions-Dateien später direkt
 - **Template-Datei fehlt in `templates/`:** Stop — die Skill-Installation ist unvollständig (bei Paket-/Symlink-Installation: Repo aktualisieren; bei Copy-Installation: Skill neu installieren).
 - **`setup-matt-pocock-skills` nicht installiert:** Stop mit Installationshinweis — ohne ihn fehlen Tracker-Adapter und AGENTS.md-Block, der Rest wäre wirkungslos.
 - **`triage` nicht installiert:** kein Stop — `triage-labels.md` entfällt (so verhält sich auch `setup-matt-pocock-skills`), im Abschluss vermerken.
+- **`wayfinder` nicht installiert:** kein Stop — Profil `klein` braucht ihn nicht; Profil `groß` fällt laut `secure-feature` §4 auf breadth-first-Grilling mit derselben Pflicht-Security-Frontier zurück.
 - **Weder `AGENTS.md` noch `CLAUDE.md` existieren:** `setup-matt-pocock-skills` fragt selbst, welche Datei angelegt werden soll; Schritt 4 folgt dann seiner Wahl.

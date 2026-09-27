@@ -30,6 +30,9 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 | `tdd` | `implement-ticket` folgt ihm; Artefakt-Templates referenzieren ihn |
 | `codebase-design` | Vokabular-Referenz für `tdd` (deep modules, seams) |
 | `triage` | Triage-Rollen; `to-tickets`/`to-spec` labeln damit |
+| `wayfinder` | Profil `groß` in `secure-feature` Spezifizieren: Planungs-Engine (Map/Fog-of-War auf dem Tracker) mit Pflicht-Security-Frontier; Fallback ohne ihn: breadth-first-Grilling |
+| `research` | Wayfinder-Ticket-Typ `research` (AFK): Recherche an Primärquellen via Hintergrund-Agent, Ergebnis als Markdown-Datei mit Quellenangaben |
+| `prototype` | Wayfinder-Ticket-Typ `prototype` (HITL): Wegwerf-Prototyp zur Beantwortung von Designfragen — Logic-Demo (eine HTML-Datei) oder UI-Varianten (`?variant=`) |
 | `setup-matt-pocock-skills` | Einmal-Setup pro Repo: Issue-Tracker, Triage-Labels, Domain-Docs |
 | `setup-secure-sdlc` | Einmal-Setup pro Repo (Orchestrator): installiert `docs/agents`-Konventionen aus Skill-Templates, mergt AGENTS.md, delegiert an `setup-matt-pocock-skills`, prüft App-Docs/CONVENTIONS |
 
@@ -45,7 +48,7 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 
 ## Skill-Installation (ein Befehl)
 
-Das Repo ist ein pi-Package (`package.json` mit `pi.skills`) und folgt der Agent-Skills-Konvention (`skills/<name>/SKILL.md`) — alle 17 Skills sind name-/frontmatter-konform und werden von pi, oh-my-pi und opencode nativ entdeckt.
+Das Repo ist ein pi-Package (`package.json` mit `pi.skills`) und folgt der Agent-Skills-Konvention (`skills/<name>/SKILL.md`) — alle 20 Skills sind name-/frontmatter-konform und werden von pi, oh-my-pi und opencode nativ entdeckt.
 
 **pi coding agent** — klont das Repo nach `~/.pi/agent/git/` und verlinkt es in den Einstellungen:
 
@@ -90,4 +93,8 @@ Idempotent: bereits gepflegte Dateien werden nicht still überschrieben. Der Ski
 ## Bewusst nicht enthalten
 
 - `writing-for-agents` (Meta-Skill zur Pflege von Skills/AGENTS.md) — nicht nötig zur Laufzeit.
-- `archify`, `prototype`, `research`, `wizard`, `ponytail`, `diagnosing-bugs` etc. — unabhängige Werkzeuge, keine Workflow-Abhängigkeit (max. optionale Erwähnungen im Fließtext).
+- `archify`, `wizard`, `ponytail`, `diagnosing-bugs` etc. — unabhängige Werkzeuge, keine Workflow-Abhängigkeit (max. optionale Erwähnungen im Fließtext).
+
+## Herkunft und Lizenz
+
+Die Pocock-Basis-Skills (`grilling`, `to-spec`, `to-tickets`, `triage`, `tdd`, `codebase-design`, `domain-modeling`, `code-review`, `setup-matt-pocock-skills`, `wayfinder`, `research`, `prototype`) stammen aus [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) — teils unverändert übernommen (u. a. `wayfinder`, `research`, `prototype`), teils dokumentiert erweitert (siehe `docs/agents/secure-sdlc-konventionen.md` §1). Damit deckt das Bundle alle vier Wayfinder-Ticket-Typen ab (`research`, `prototype`, `grilling`, `task`).

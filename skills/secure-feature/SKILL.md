@@ -31,6 +31,7 @@ Ground rules:
 - **small:** bugfix, small extension, tight free-text description without new interfaces or data flows.
 - **large:** new feature with interfaces/data, new application, unclear scope.
 - Borderline cases → large. If the HITL budget (30–60 minutes) exposes a wrongly small profile → re-profile as large, don't trim.
+- Execution: `small` runs grilling (§4); `large` runs wayfinder planning plus the same artifact set (§4).
 
 ## 4. Phases
 
@@ -38,9 +39,13 @@ Order: `Spezifizieren → Threat-Model → Testfälle → Umsetzung → Security
 
 ### Spezifizieren
 
-Call the Skill tool twice, for "grilling" and "domain-modeling" (CONTEXT.md; ADRs only in the large profile) and in parallel fill the artifacts `abuse-cases.md`, `anforderungen.md`, `akzeptanzkriterien.md` (+ `use-cases.md` only large). Grilling in rounds: number the **frontier**, give a recommended answer with every question, then wait for the human.
+Branch by profile; the artifact set is the destination either way.
 
-DoD: all artifacts of the phase `fertig`; each artifact's coverage rules from its template satisfied; no open decisions left.
+**Profile `klein`:** Call the Skill tool twice, for "grilling" and "domain-modeling" (CONTEXT.md) and in parallel fill the artifacts `abuse-cases.md`, `anforderungen.md`, `akzeptanzkriterien.md`. Grilling in rounds: number the **frontier**, give a recommended answer with every question, then wait for the human.
+
+**Profile `groß`:** Plan with `wayfinder` first — call it with the feature as the loose idea and the artifact set (incl. `use-cases.md`, ADRs) as the destination. The map is a planning aid, **not** a replacement for the artifacts. The **security frontier is mandatory**: the map must ticket, graduate from fog, or resolve at least — abuse cases, assets/trust boundaries, security requirements (REQ security flag), security-relevant acceptance criteria. You propose, the human confirms (per template rules; nothing is asked empty). Work the map one ticket per session; the phase label stays `Spezifizieren`, record the map reference and open tickets in STATUS.md "Historie". When the way is clear, fill the artifacts from the map, then call "grilling" and "domain-modeling" (CONTEXT.md; ADRs) for what the map left open. Reconcile per `docs/agents/artefakt-erweiterung-to-spec-to-tickets.md` §3 step 0 (first writer) — never duplicate existing rows. `wayfinder` not installed → fall back to breadth-first grilling rounds covering the same mandatory security frontier.
+
+DoD: all artifacts of the phase `fertig`; each artifact's coverage rules from its template satisfied; no open decisions left; (`groß`) map resolved or its remaining tickets linked in STATUS.md.
 
 ### Threat-Model
 

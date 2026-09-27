@@ -20,7 +20,7 @@ Gilt für: `secure-feature`, `threat-model`, `security-review`, `merge-app-docs`
 
 ## 3. Zwei Planungsprofile
 
-| | **klein** (grill-with-docs-Niveau) | **groß** (wayfinder-Niveau) |
+| | **klein** (grilling-Niveau) | **groß** (wayfinder-Niveau) |
 |---|---|---|
 | Auslöser | Bugfix, kleine Erweiterung, enge Freitextbeschreibung | Neues Feature mit Schnittstellen/Daten, neue Anwendung, unklarer Umfang |
 | Abuse-Cases | ✅ | ✅ |
@@ -33,7 +33,9 @@ Gilt für: `secure-feature`, `threat-model`, `security-review`, `merge-app-docs`
 | CONTEXT.md-Update | ✅ immer | ✅ immer |
 
 - Die Profil-Auswahlregel (anhand Feature-Eingang) definiert der Orchestrator-Skill.
-- CONTEXT.md wird über Pococks `/grill-with-docs` gepflegt, nicht über eigene Artefakte.
+- Beim Profil `groß` führt `wayfinder` die Planung: Map mit Decision-Tickets auf dem konfigurierten Tracker, Fog-of-War, ein Ticket pro Session. Die **Security-Frontier ist Pflichtbestandteil jeder Map**: Abuse-Cases, Assets/Trust Boundaries, Security-REQs (Flag) und security-relevante Akzeptanzkriterien müssen als Tickets, Fog-Abschläge aus „Not yet specified" oder Resolutionen abgedeckt sein — Vorschlag durch den Agenten, Bestätigung durch den Entwickler (§8: nichts wird leer erfragt). Die Map ersetzt keine Artefakte; sie füttert sie (Reconcile: erster Schreiber, siehe `artefakt-erweiterung-to-spec-to-tickets.md` §3 Schritt 0).
+- `wayfinder` fehlt im Ziel-Repo → Fallback: breadth-first-Grilling-Runden mit derselben Pflicht-Security-Frontier (`secure-feature` §4).
+- CONTEXT.md wird über Pococks `/grilling` gepflegt, nicht über eigene Artefakte.
 
 ### Detailgrade für das Profil klein (harte Grenzen)
 

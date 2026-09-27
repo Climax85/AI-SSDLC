@@ -1,6 +1,6 @@
 {
   "name": "secure-sdlc-skills",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "description": "Secure-SDLC agent skills (secure-feature workflow chain) for pi coding agent, oh-my-pi (omp), opencode and other Agent-Skills-compatible harnesses.",
   "keywords": [
     "pi-package",
