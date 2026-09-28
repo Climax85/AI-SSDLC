@@ -24,7 +24,7 @@ Ground rules:
 
 ## 2. Conventions-Referenz
 
-- C#-Projekt (`.csproj` im Repo) und `CONVENTIONS.md` am Repo-Root fehlt → Kopie aus `<skill-dir>/templates/conventions/csharp.md` anlegen. **Vorhandene Datei nie überschreiben.**
+- C#-Projekt (`.csproj` im Repo) und `CONVENTIONS.md` am Repo-Root fehlt → Kopie aus `<skill-dir>/templates/conventions/csharp.md` anlegen (`<skill-dir>` = eigenes Skill-Verzeichnis, dynamisch über die Skill-Liste auflösen — nicht hart kodieren). **Vorhandene Datei nie überschreiben.**
 - Andere Sprachen: `CONVENTIONS.md` am Root muss existieren. Fehlt sie → Note-Befund (Achse C entfällt diese Runde), kein Selbstschreiben.
 
 ## 3. Achsen

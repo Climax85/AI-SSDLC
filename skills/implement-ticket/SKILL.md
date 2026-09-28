@@ -51,7 +51,7 @@ Ground rules:
 
 Nach dem Commit, vor dem Resolve. Der Scope ist der Ticket-Commit dieser Runde.
 
-1. **Delegiere** den Review an den Subagent: `{ agent: "review-ticket", task: "Feature: <feature-dir>, Ticket: <NN>, Commit: <hash>" }`. Kein `subagent`-Tool verfügbar → arbeite `.pi/skills/review-ticket/SKILL.md` selbst exakt ab (Inline-Fallback, kostet Kontext) — der Loop gilt unverändert.
+1. **Delegiere** den Review an einen Subagent mit frischem Kontext. Task-String: `Feature: <feature-dir>, Ticket: <NN>, Commit: <hash>` — plus der Auftrag, die SKILL.md des Skills `review-ticket` zu laden und exakt abzuarbeiten. Skill-Verzeichnis **dynamisch** auflösen (Skill-Liste, `/skill:review-ticket` o. ä.; je nach Installation liegt der Skill unter `.pi/skills/`, `.agents/skills/`, `~/.pi/agent/skills/` oder einem Paket-/Git-Pfad) — **niemals einen festen Pfad annehmen**. Ein Skill ist kein Agent: der Subagent-Aufruf referenziert nicht `{ agent: "review-ticket" }`, sondern übergibt den Skill-Namen im Task. Steht kein Subagent-Mechanismus zur Verfügung (kein Tool oder keine definierten Agenten) → arbeite die SKILL.md selbst exakt ab (Inline-Fallback, kostet Kontext) — der Loop gilt unverändert.
 2. **Verdikt `clean`** → weiter mit §6 (Resolve).
 3. **Verdikt `must-fix`** → behebe jedes Item (TDD: zeige mit einem Test, was das Item bricht, falls möglich), Fixup-Commit, dann **Re-Check**: erneuter Subagent-Aufruf mit derselben Runde (prüft nur die offenen Items).
 4. Re-Check weiterhin `must-fix` → Ticket auf `ready-for-agent` mit Kommentar, Session stoppen und dem Entwickler melden. Keine dritte Runde, keine Eigenmächtigkeit.
@@ -72,4 +72,4 @@ Notes (`RV-nn`) stehen bereits in `findings.md` — im Ticket-Kommentar vermerke
 - Ticket contract-violating (no "What to build", no "Blocked by") → stop, report the ticket.
 - Full suite red after your work → either fix within the session, or set the ticket back to `ready-for-agent` with a comment describing the failure. **Never resolve a ticket on red.**
 - Acceptance criterion not achievable as written → set `ready-for-agent` with a comment naming the criterion and the blocker; do not silently redefine scope.
-- Subagent unerreichbar/stürzt ab → Inline-Fallback wie in §5 Schritt 1; schlägt auch der fehl, Ticket auf `ready-for-agent` mit Vermerk und dem Entwickler melden.
+- Subagent unerreichbar/stürzt ab (inkl. „Unknown agent“) → Inline-Fallback wie in §5 Schritt 1; schlägt auch der fehl, Ticket auf `ready-for-agent` mit Vermerk und dem Entwickler melden.
