@@ -1,6 +1,6 @@
 ---
 name: implement-ticket
-description: Implement exactly one published ticket from a secure-feature workflow in a fresh session — claim it, implement test-first, run the full suite, commit, delegate the per-ticket review (review-ticket loop), resolve it. The ticket lives in the configured tracker (local tracker: `.scratch/<feature>/issues/`). Use when a ticket number should be worked off, when the frontier ticket should be auto-picked, or when per-ticket sessions run after `to-tickets`.
+description: Implement exactly one published ticket from a secure-feature workflow in a fresh session on its own feature branch — claim it, branch, implement test-first, run the full suite, commit, delegate the per-ticket review (review-ticket loop), open a pull request, resolve it. The ticket lives in the configured tracker (local tracker: `.scratch/<feature>/issues/`). Use when a ticket number should be worked off, when the frontier ticket should be auto-picked, or when per-ticket sessions run after `to-tickets`.
 ---
 
 # Implement Ticket
@@ -30,6 +30,7 @@ Ground rules:
    - ticket claimed (an assignee set / `Status: claimed`) → another session owns it, stop.
    - a blocking ticket not yet `resolved` → stop and name the blockers.
 3. Claim it (adapter: assign yourself / set `Status: claimed`) — the session's first write.
+4. Create the ticket branch: `git switch -c feature/<feature-slug>/<NN>-<slug>` from the integration (default) branch. A branch for this ticket already exists (resumed session) → switch to it instead of creating. All commits of this ticket happen only on this branch.
 
 ## 3. Implement
 
@@ -62,7 +63,8 @@ Notes (`RV-nn`) stehen bereits in `findings.md` — im Ticket-Kommentar vermerke
 
 - Voraussetzung: Review-Runde dieser Runde ist `clean`.
 - Comment on the ticket (adapter): what was built, test counts, commit hash(s), Review-Ergebnis.
-- Resolve it (adapter: close the issue / set `Status: resolved`).
+- Create the pull request into the integration branch — repo with remote: `gh pr create` / `glab mr create` (title `<NN>: <ticket title>`, body: what was built, acceptance criteria with `x`/`-`, test counts, commit hash); no remote (local tracker): skip, note `no PR (local)` in the ticket comment. **Merging is not this skill's job** — the merge happens in the re-entered planning session (secure-feature Umsetzung sub-step 4).
+- Comment the PR/MR link on the ticket; then resolve it (adapter: close the issue / set `Status: resolved`).
 - Report the new frontier (adapter frontier query) so the next session can start.
 
 ## 7. Error paths

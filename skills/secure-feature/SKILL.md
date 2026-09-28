@@ -77,10 +77,10 @@ Four sub-steps, **each in its own session**:
 
 1. **Spec session (this skill):** Call the Skill tool with "to-spec" (artifact output into the feature directory), present the proposed test seams to the developer for confirmation, update STATUS.md (phase stays `Umsetzung`, spec referenced in "Historie") — and **stop the session**. Never implement in this session.
 2. **Tickets session (this skill):** Call the Skill tool with "to-tickets" (quiz the developer, then publish via the **configured tracker** as children of the feature epic — see `docs/agents/feature-operations.md`; local tracker: into the feature's `issues/`), update STATUS.md (tickets referenced in "Historie") — and **stop the session**. Never implement in this session.
-3. **Ticket sessions (one fresh session per ticket):** each runs the `implement-ticket` skill with the ticket number (or lets it pick the frontier). It claims the ticket, implements test-first, runs the full suite, **commits exactly once**, resolves the ticket.
-4. **Re-entered planning session (this skill):** query the tracker's feature tickets (adapter frontier query; STATUS.md paths for the local tracker). Unresolved tickets → report the frontier (open, unblocked, unclaimed) and stop. All tickets `resolved` → run the full test suite once; green → DoD satisfied.
+3. **Ticket sessions (one fresh session per ticket):** each runs the `implement-ticket` skill with the ticket number (or lets it pick the frontier). It claims the ticket, creates its feature branch, implements test-first, runs the full suite, **commits exactly once**, delegates the per-ticket review (`review-ticket`), opens a pull request — and resolves the ticket.
+4. **Re-entered planning session (this skill):** query the tracker's feature tickets (adapter frontier query; STATUS.md paths for the local tracker). Unresolved tickets → report the frontier (open, unblocked, unclaimed) and stop. All tickets `resolved` → merge the ticket PRs (repo with remote: `gh pr merge` / `glab mr merge`, squash or merge commit per repo convention; wait for CI green where CI exists; conflicts or red CI → set the ticket back to `ready-for-agent` with a comment), then run the full test suite once on the integration branch; green → DoD satisfied.
 
-DoD: all tickets `resolved`; test cases green.
+DoD: all tickets `resolved` with their PRs merged into the integration branch; test cases green.
 
 ### Security-Review
 
@@ -88,7 +88,7 @@ DoD: all tickets `resolved`; test cases green.
 
 **Findings loop:** present every finding to the human with a fix-or-accept recommendation. Then:
 
-- **Fix:** publish a follow-up ticket per coherent fix into the feature's `issues/` (same structure as Umsetzung tickets, status `ready-for-agent`) and implement it in ticket sessions (`implement-ticket`, Umsetzung Sub-Step-3 mechanics — fresh session per ticket, one commit each).
+- **Fix:** publish a follow-up ticket per coherent fix into the feature's tracker queue (same structure as Umsetzung tickets, status `ready-for-agent`) and implement it in ticket sessions (`implement-ticket`, Umsetzung Sub-Step-3 mechanics — fresh session per ticket, own feature branch, one commit each, PR) — then merge its PR (Sub-Step-4 merge mechanics) before re-running the walks.
 - **Accept:** record as `akzeptiert (<Begründung, durch wen>)` in `findings.md` and STATUS.md.
 - **Artifact-level amendments** (e.g. an `IF-nn` row, an AK Lesart) are made directly in the artifact, not as tickets.
 
