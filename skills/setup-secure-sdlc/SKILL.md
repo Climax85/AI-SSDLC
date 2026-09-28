@@ -22,6 +22,7 @@ Vor jedem Schritt den Ausgangszustand lesen, nichts annehmen:
 - `docs/agents/`: welche der fünf Konventions-Dateien existieren bereits (`issue-tracker.md`, `triage-labels.md`, `domain.md` — verwaltet von `setup-matt-pocock-skills`; `secure-sdlc-konventionen.md`, `artefakt-erweiterung-to-spec-to-tickets.md` — verwaltet von diesem Skill)?
 - `AGENTS.md` / `CLAUDE.md` am Repo-Root: welche existiert, enthält sie bereits einen `## Agent skills`-Block oder einen `## Secure-SDLC`-Abschnitt?
 - `docs/anwendungsdokumentation.md`: existiert sie, trägt sie noch Template-Platzhalter?
+- `.pi/agents/`: existiert `.pi/agents/review-ticket.md` bereits? Ist die pi-subagents-Erweiterung installiert (sonst greift der Agent nicht)?
 - `CONVENTIONS.md` am Repo-Root?
 - Skills-Verfügbarkeit: sind `setup-matt-pocock-skills`, `triage`, `secure-feature`, `init-app-docs` sowie `wayfinder` (nur Profil `groß` nötig) installiert (Skill-Liste bzw. Geschwister-Verzeichnisse dieses Skills)?
 
@@ -52,27 +53,36 @@ Eine der Dateien existiert bereits → aktuellen Inhalt zeigen, Unterschiede ben
 
 Hänge den Inhalt von `templates/AGENTS-secure-sdlc-section.md` an **dieselbe Datei** an, die `setup-matt-pocock-skills` in Schritt 2 gewählt hat (`CLAUDE.md` oder `AGENTS.md`). Ein bereits vorhandener `## Secure-SDLC`-Abschnitt wird in-place aktualisiert, niemals dupliziert; fremde Abschnitte bleiben unangetastet.
 
-## 5. CONVENTIONS.md-Check
+## 5. Subagent `review-ticket` installieren
+
+Kopiere `templates/agents/review-ticket.md` dieses Skills nach `.pi/agents/review-ticket.md` im Ziel-Repo (projekt-lokaler Agent für pi-subagents; Projekt-Agenten überschreiben gleichnamige Package-Agenten). Damit kann `implement-ticket` den Review als `{ agent: "review-ticket", task: "Feature: <feature-dir>, Ticket: <NN>, Commit: <hash>" }` delegieren, statt im teuren Inline-Fallback zu laufen.
+
+- Bereits vorhanden → aktuellen Inhalt zeigen, Unterschiede benennen, ausdrücklich bestätigen lassen; dann ersetzen oder belassen.
+- **Voraussetzung:** die pi-subagents-Erweiterung (`pi install npm:pi-subagents`). Fehlt sie, Datei trotzdem installieren (sie schadet nichts) und als Warnung vermerken — `implement-ticket` fällt weiterhin auf den Inline-Fallback zurück.
+- Andere Harnesses (Claude Code, opencode …) ignorieren `.pi/agents/`; für sie bleibt es beim Inline-Fallback.
+
+## 6. CONVENTIONS.md-Check
 
 Fehlt `CONVENTIONS.md` am Repo-Root, den Entwickler informieren: `review-ticket` kopiert sonst sein mitgeliefertes **C#-Beispiel** als Fallback-`CONVENTIONS.md` (Namespaces/Beispiele des Ursprungsprojekts). Anbieten:
 
 - **Projektspezifisch anlegen** (empfohlen): ein knappes Gerüst (Sprache/Framework, Test-Konventionen, Commit-Regeln, verbindliche Patterns) aus den Repo-Signalen (Manifeste, bestehende Tests, CI) entwerfen, einmal bestätigen lassen, schreiben.
 - **Fallback akzeptieren:** nichts tun; `review-ticket` legt zur Laufzeit das C#-Beispiel an (eine vorhandene `CONVENTIONS.md` wird nie überschrieben).
 
-## 6. App-Docs-Check (harte Voraussetzung)
+## 7. App-Docs-Check (harte Voraussetzung)
 
 Prüfe den konfigurierten Pfad (Default `docs/anwendungsdokumentation.md`, ggf. im `## Secure-SDLC`-Abschnitt konfiguriert):
 
 - **Datei fehlt oder trägt Template-Platzhalter** in Pflichtabschnitten → `init-app-docs` aufrufen (`/skill:init-app-docs`) und das Setup damit abschließen. Weigert sich der Entwickler, hier anzufangen: harter Stop mit dem Hinweis, dass `secure-feature` in §2 Setup ebenso stoppt — der Workflow startet erst nach initialisierter App-Doku.
 - **Datei vollständig** → nur vermerken und weiter.
 
-## 7. Abschluss-Verifikation
+## 8. Abschluss-Verifikation
 
 Tabelle liefern (Datei | Status | geprüft gegen):
 
 - [ ] `docs/agents/issue-tracker.md`, `triage-labels.md`, `domain.md` — von `setup-matt-pocock-skills` geschrieben
 - [ ] `docs/agents/secure-sdlc-konventionen.md`, `artefakt-erweiterung-to-spec-to-tickets.md`, `feature-operations.md` — aus diesem Skill installiert
 - [ ] `## Agent skills`-Block und `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, keine Duplikate
+- [ ] `.pi/agents/review-ticket.md` installiert (oder bewusst übersprungen), pi-subagents vorhanden oder Fallback akzeptiert
 - [ ] `docs/anwendungsdokumentation.md` initialisiert
 - [ ] CONVENTIONS-Entscheidung getroffen (projektspezifisch oder Fallback)
 - [ ] `wayfinder` installiert oder Profil-`groß`-Fallback (breadth-first-Grilling) bewusst akzeptiert
@@ -86,5 +96,6 @@ Dem Entwickler abschließend sagen, dass alle Konventions-Dateien später direkt
 - **Template-Datei fehlt in `templates/`:** Stop — die Skill-Installation ist unvollständig (bei Paket-/Symlink-Installation: Repo aktualisieren; bei Copy-Installation: Skill neu installieren).
 - **`setup-matt-pocock-skills` nicht installiert:** Stop mit Installationshinweis — ohne ihn fehlen Tracker-Adapter und AGENTS.md-Block, der Rest wäre wirkungslos.
 - **`triage` nicht installiert:** kein Stop — `triage-labels.md` entfällt (so verhält sich auch `setup-matt-pocock-skills`), im Abschluss vermerken.
+- **`pi-subagents` nicht installiert:** kein Stop — `.pi/agents/review-ticket.md` trotzdem anlegen, als Warnung vermerken; Delegation fällt auf den Inline-Fallback zurück.
 - **`wayfinder` nicht installiert:** kein Stop — Profil `klein` braucht ihn nicht; Profil `groß` fällt laut `secure-feature` §4 auf breadth-first-Grilling mit derselben Pflicht-Security-Frontier zurück.
 - **Weder `AGENTS.md` noch `CLAUDE.md` existieren:** `setup-matt-pocock-skills` fragt selbst, welche Datei angelegt werden soll; Schritt 4 folgt dann seiner Wahl.

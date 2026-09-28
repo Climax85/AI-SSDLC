@@ -48,7 +48,7 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 
 ## Skill-Installation (ein Befehl)
 
-Das Repo ist ein pi-Package (`package.json` mit `pi.skills`) und folgt der Agent-Skills-Konvention (`skills/<name>/SKILL.md`) — alle 20 Skills sind name-/frontmatter-konform und werden von pi, oh-my-pi und opencode nativ entdeckt.
+Das Repo ist ein pi-Package (`package.json` mit `pi.skills` und `pi.subagents.agents`) und folgt der Agent-Skills-Konvention (`skills/<name>/SKILL.md`) — alle 20 Skills sind name-/frontmatter-konform und werden von pi, oh-my-pi und opencode nativ entdeckt. Der Subagent `agents/review-ticket.md` macht die Review-Delegation von `implement-ticket` in pi (mit pi-subagents) zum First-Class-Aufruf; `setup-secure-sdlc` installiert ihn projekt-lokal nach `.pi/agents/`.
 
 **pi coding agent** — klont das Repo nach `~/.pi/agent/git/` und verlinkt es in den Einstellungen:
 
@@ -79,7 +79,7 @@ Updates: `pi update --extensions` bzw. `pi update --all` (pi), Ref neu setzen vi
 
 Die Skills allein reichen nicht — die Workflow-Kette erwartet pro Ziel-Repo Konventions-Dokumente und App-Docs (hart kodierte Pfade in `skills/secure-feature`, `skills/code-review` u. a.). Das übernimmt der Setup-Skill:
 
-1. **`/skill:setup-secure-sdlc`** im Ziel-Repo ausführen. Er erkundet den Repo-Zustand, ruft `setup-matt-pocock-skills` auf (Tracker-Wahl, Triage-Labels, Domain-Layout inkl. `## Agent skills`-Block in AGENTS.md/CLAUDE.md), installiert danach die beiden Secure-SDLC-Konventions-Dateien aus seinen gebündelten Templates nach `docs/agents/`, ergänzt einen `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, klärt die CONVENTIONS-Entdeckung (`review-ticket`-Fallback ist ein C#-Beispiel) und prüft die App-Docs (`init-app-docs` wird delegiert bzw. als harte Voraussetzung gemeldet).
+1. **`/skill:setup-secure-sdlc`** im Ziel-Repo ausführen. Er erkundet den Repo-Zustand, ruft `setup-matt-pocock-skills` auf (Tracker-Wahl, Triage-Labels, Domain-Layout inkl. `## Agent skills`-Block in AGENTS.md/CLAUDE.md), installiert danach die Secure-SDLC-Konventions-Dateien aus seinen gebündelten Templates nach `docs/agents/`, ergänzt einen `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, legt den Subagent `review-ticket` nach `.pi/agents/` an (delegiert wird damit statt im teuren Inline-Fallback), klärt die CONVENTIONS-Entdeckung (`review-ticket`-Fallback ist ein C#-Beispiel) und prüft die App-Docs (`init-app-docs` wird delegiert bzw. als harte Voraussetzung gemeldet).
 2. **Loslegen** — `/skill:secure-feature <feature>` oder Ticket-Referenz.
 
 Idempotent: bereits gepflegte Dateien werden nicht still überschrieben. Der Skill warnt außerdem, falls das zentrale Artefakt-Template-Verzeichnis `templates/` im Ziel-Repo fehlt (Stop-Stelle von `secure-feature` §2 Setup).
