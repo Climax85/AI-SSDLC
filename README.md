@@ -88,7 +88,7 @@ Idempotent: bereits gepflegte Dateien werden nicht still überschrieben. Der Ski
 
 - **`skills/review-ticket/templates/conventions/csharp.md`** — Beispiel-Conventions aus dem Ursprungsprojekt (C#/.NET 10, `AccessExportTool.*`-Namespaces). Für ein neues Projekt ersetzen; `review-ticket` kopiert diese Datei als Fallback-`CONVENTIONS.md` ans Repo-Root. Eine vorhandene `CONVENTIONS.md` wird nie überschrieben.
 - **`docs/agents/*`** — werden pro Repo von `setup-matt-pocock-skills` (drei Dateien) bzw. `setup-secure-sdlc` (zwei Dateien) generiert.
-- **Sprache der Artefakte** — Templates und Skills sind auf Deutsch (Projektkonvention des Ursprungsprojekts).
+- **Sprachen** — Markdown-Dokumentation (Artefakte, Templates, App-Docs, Tickets) auf Deutsch; Code auf Englisch (Identifier, Variablen, Kommentare, Testnamen, Commit-Messages, Branch-Namen). Verbindliche Regel: `docs/agents/secure-sdlc-konventionen.md` §4.
 
 ## Bewusst nicht enthalten
 

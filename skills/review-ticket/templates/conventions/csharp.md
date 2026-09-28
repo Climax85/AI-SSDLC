@@ -16,7 +16,7 @@ Verbindliche Coding-Conventions für Produkt- und Testcode dieses Repos (Review-
 ## Sprache
 
 - Identifier und Testnamen: Englisch (`snake_case` bei Testmethoden, wie `path_separators_lead_to_rejection`).
-- XML-Doc-Kommentare und Begründungskommentare: Deutsch (Projektsprache der Artefakte).
+- XML-Doc-Kommentare und Begründungskommentare: Englisch (Code-Sprachregel, siehe `secure-sdlc-konventionen.md` §4 — nur Markdown-Dokumentation ist deutsch).
 - `var` nur, wo der Typ evident ist; ansonsten explizit.
 
 ## Sicherheitsrelevante String-Regeln
