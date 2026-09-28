@@ -47,6 +47,18 @@ Branch by profile; the artifact set is the destination either way.
 
 DoD: all artifacts of the phase `fertig`; each artifact's coverage rules from its template satisfied; no open decisions left; (`groß`) map resolved or its remaining tickets linked in STATUS.md.
 
+### Feature-Epic (nach Spezifizieren, vor Threat-Model)
+
+Create the **feature epic** in the configured tracker (see `docs/agents/feature-operations.md`), unless the intake was a ticket reference — then the referenced ticket *is* the epic and you update it in place. Epic body, condensed, German:
+
+- `## Ziel` — the intake in 2–3 sentences
+- `## Ergebnisse Spezifizieren` — abuse cases (condensed), REQ/AK core (counts + the security-flagged ones by ID), open decisions
+- `## Verweise` — artifact dir (`.scratch/<feature>/`, flüchtig), wayfinder map link (`groß`), app-docs path
+
+Later phases append condensed results (Threat-Model core with high risks, Security-Review findings); the final condensed write-back is `Gemergt`'s `ticket-update.md`. Materialize the epic reference in STATUS.md "Historie".
+
+DoD: epic exists in the tracker and is referenced from STATUS.md; intake-by-reference repos reuse the referenced ticket.
+
 ### Threat-Model
 
 Call the `threat-model` skill; it reads its own inputs from STATUS.md.
@@ -64,9 +76,9 @@ DoD: `test-cases.md` `fertig`; the "Abdeckt AC-nn" mapping column complete. **La
 Four sub-steps, **each in its own session**:
 
 1. **Spec session (this skill):** Call the Skill tool with "to-spec" (artifact output into the feature directory), present the proposed test seams to the developer for confirmation, update STATUS.md (phase stays `Umsetzung`, spec referenced in "Historie") — and **stop the session**. Never implement in this session.
-2. **Tickets session (this skill):** Call the Skill tool with "to-tickets" (quiz the developer, then publish into the feature's `issues/`), update STATUS.md (tickets referenced in "Historie") — and **stop the session**. Never implement in this session.
+2. **Tickets session (this skill):** Call the Skill tool with "to-tickets" (quiz the developer, then publish via the **configured tracker** as children of the feature epic — see `docs/agents/feature-operations.md`; local tracker: into the feature's `issues/`), update STATUS.md (tickets referenced in "Historie") — and **stop the session**. Never implement in this session.
 3. **Ticket sessions (one fresh session per ticket):** each runs the `implement-ticket` skill with the ticket number (or lets it pick the frontier). It claims the ticket, implements test-first, runs the full suite, **commits exactly once**, resolves the ticket.
-4. **Re-entered planning session (this skill):** scan the feature's `issues/` from STATUS.md paths. Unresolved tickets → report the frontier (open, unblocked, unclaimed) and stop. All tickets `resolved` → run the full test suite once; green → DoD satisfied.
+4. **Re-entered planning session (this skill):** query the tracker's feature tickets (adapter frontier query; STATUS.md paths for the local tracker). Unresolved tickets → report the frontier (open, unblocked, unclaimed) and stop. All tickets `resolved` → run the full test suite once; green → DoD satisfied.
 
 DoD: all tickets `resolved`; test cases green.
 

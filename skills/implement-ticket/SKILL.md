@@ -1,33 +1,35 @@
 ---
 name: implement-ticket
-description: Implement exactly one published ticket from a secure-feature feature directory in a fresh session — claim it, implement test-first, run the full suite, commit, delegate the per-ticket review (review-ticket loop), resolve it. Use when a ticket number from `.scratch/<feature>/issues/` should be worked off, when the frontier ticket should be auto-picked, or when per-ticket sessions run after `to-tickets`.
+description: Implement exactly one published ticket from a secure-feature workflow in a fresh session — claim it, implement test-first, run the full suite, commit, delegate the per-ticket review (review-ticket loop), resolve it. The ticket lives in the configured tracker (local tracker: `.scratch/<feature>/issues/`). Use when a ticket number should be worked off, when the frontier ticket should be auto-picked, or when per-ticket sessions run after `to-tickets`.
 ---
 
 # Implement Ticket
 
-You implement exactly one ticket in a fresh session. The ticket file is information-rich by design; STATUS.md gives you the paths. You claim, implement, commit, get the ticket reviewed, resolve — nothing else.
+You implement exactly one ticket in a fresh session. The ticket is information-rich by design. You claim, implement, commit, get the ticket reviewed, resolve — nothing else.
+
+The tracker's feature operations (`docs/agents/feature-operations.md`) define the ticket's medium and how to read, claim, status, comment, and resolve it. Local-markdown tracker → one file under `.scratch/<feature>/issues/`; GitHub/GitLab → an issue. STATUS.md gives you the paths (local tracker) and the epic reference.
 
 `resolved` means: implemented **and** reviewed clean. The review-ticket loop is part of this skill, not optional.
 
 Ground rules:
 
-- Read only: `STATUS.md` (paths + phase), the ticket file, and only what the ticket itself references (spec, test-cases). Never "the repo" broadly.
-- Write only: code/tests and the ticket file (claim/resolve).
+- Read only: `STATUS.md` (paths + phase), the ticket (via the adapter), and only what the ticket itself references (spec, test-cases). Never "the repo" broadly.
+- Write only: code/tests and the ticket (claim, status, comment — via the adapter).
 - Stop rules are **hard stops**: halt and report, do not improvise.
 
 ## 1. Input
 
-- Ticket number (`06`) or nothing → you pick the frontier ticket (lowest number that is `ready-for-agent` and unblocked).
-- Feature directory: pass it as an argument (like the secure-feature call), or pass the ticket file path directly. Without either, stop and ask.
+- Ticket number (`06`) or nothing → you pick the frontier ticket (adapter frontier query: open, unblocked, unclaimed; local tracker: lowest number).
+- Feature reference: pass it as an argument (like the secure-feature call); local tracker: the feature directory or the ticket file path directly. Without a resolvable ticket, stop and ask.
 
 ## 2. Claim (before any code work)
 
 1. Read `STATUS.md`: phase must be `Umsetzung` — otherwise stop.
-2. Read the ticket file. Hard stops:
-   - `Status: resolved` → already done, stop.
-   - `Status: claimed` → another session owns it, stop.
-   - A "Blocked by" ticket not yet `resolved` → stop and name the blockers.
-3. Set `Status: claimed` and save.
+2. Read the ticket via the adapter. Hard stops:
+   - ticket `resolved` (closed) → already done, stop.
+   - ticket claimed (an assignee set / `Status: claimed`) → another session owns it, stop.
+   - a blocking ticket not yet `resolved` → stop and name the blockers.
+3. Claim it (adapter: assign yourself / set `Status: claimed`) — the session's first write.
 
 ## 3. Implement
 
@@ -59,13 +61,13 @@ Notes (`RV-nn`) stehen bereits in `findings.md` — im Ticket-Kommentar vermerke
 ## 6. Resolve
 
 - Voraussetzung: Review-Runde dieser Runde ist `clean`.
-- Append a `## Comments` entry: what was built, test counts, commit hash(s), Review-Ergebnis.
-- Set `Status: resolved` and save.
-- Report the new frontier (open, unblocked tickets) so the next session can start.
+- Comment on the ticket (adapter): what was built, test counts, commit hash(s), Review-Ergebnis.
+- Resolve it (adapter: close the issue / set `Status: resolved`).
+- Report the new frontier (adapter frontier query) so the next session can start.
 
 ## 7. Error paths
 
-- Ticket file contract-violating (no "What to build", no "Blocked by") → stop, report the ticket.
+- Ticket contract-violating (no "What to build", no "Blocked by") → stop, report the ticket.
 - Full suite red after your work → either fix within the session, or set the ticket back to `ready-for-agent` with a comment describing the failure. **Never resolve a ticket on red.**
 - Acceptance criterion not achievable as written → set `ready-for-agent` with a comment naming the criterion and the blocker; do not silently redefine scope.
 - Subagent unerreichbar/stürzt ab → Inline-Fallback wie in §5 Schritt 1; schlägt auch der fehl, Ticket auf `ready-for-agent` mit Vermerk und dem Entwickler melden.

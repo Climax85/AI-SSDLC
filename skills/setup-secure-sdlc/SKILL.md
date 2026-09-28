@@ -40,12 +40,13 @@ Vorbedingung: `docs/agents/` existiert — Verzeichnis ggf. vorher anlegen. Ist 
 
 ## 3. Secure-SDLC-Konventionen installieren
 
-Kopiere die beiden Templates aus `templates/docs/agents/` dieses Skills nach `docs/agents/`:
+Kopiere die drei Templates aus `templates/docs/agents/` dieses Skills nach `docs/agents/`:
 
 - `secure-sdlc-konventionen.md` — Artefakt-Contracts, Kontextbudget, Profile, Zustandsführung, Anwendungsdoku-Regeln
 - `artefakt-erweiterung-to-spec-to-tickets.md` — Delta-Spezifikation des Artefakt-Passes
+- `feature-operations.md` — Vertrag für Feature-Epic und Arbeitstickets auf dem konfigurierten Tracker
 
-Eine der beiden Dateien existiert bereits → aktuellen Inhalt zeigen, Unterschiede benennen, ausdrücklich bestätigen lassen; dann ersetzen oder belassen wie er ist.
+Eine der Dateien existiert bereits → aktuellen Inhalt zeigen, Unterschiede benennen, ausdrücklich bestätigen lassen; dann ersetzen oder belassen wie er ist.
 
 ## 4. AGENTS.md — Secure-SDLC-Abschnitt
 
@@ -70,7 +71,7 @@ Prüfe den konfigurierten Pfad (Default `docs/anwendungsdokumentation.md`, ggf. 
 Tabelle liefern (Datei | Status | geprüft gegen):
 
 - [ ] `docs/agents/issue-tracker.md`, `triage-labels.md`, `domain.md` — von `setup-matt-pocock-skills` geschrieben
-- [ ] `docs/agents/secure-sdlc-konventionen.md`, `artefakt-erweiterung-to-spec-to-tickets.md` — aus diesem Skill installiert
+- [ ] `docs/agents/secure-sdlc-konventionen.md`, `artefakt-erweiterung-to-spec-to-tickets.md`, `feature-operations.md` — aus diesem Skill installiert
 - [ ] `## Agent skills`-Block und `## Secure-SDLC`-Abschnitt in derselben AGENTS.md/CLAUDE.md, keine Duplikate
 - [ ] `docs/anwendungsdokumentation.md` initialisiert
 - [ ] CONVENTIONS-Entscheidung getroffen (projektspezifisch oder Fallback)

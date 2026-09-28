@@ -10,13 +10,13 @@ Orchestrator: **`secure-feature`** — sechs Phasen, Zustand in `STATUS.md`, Art
 
 | Skill | Rolle |
 |---|---|
-| `secure-feature` | Orchestrator (Phasen, STATUS.md, Templates) |
+| `secure-feature` | Orchestrator (Phasen, STATUS.md, Templates); legt das Feature-Epic im konfigurierten Tracker an |
 | `grilling` | Spezifizieren — Frontier-Fragerunden mit Empfehlung |
 | `domain-modeling` | CONTEXT.md-Glossar + ADRs (`docs/adr/`) |
 | `threat-model` | STRIDE-Bedrohungsmodell pro Feature |
 | `to-spec` | Delta-Spezifikation → `docs/agents/artefakt-erweiterung-to-spec-to-tickets.md` |
-| `to-tickets` | Quiz → publizierte Tickets (Blocker-Reihenfolge) |
-| `implement-ticket` | Ein Ticket pro Session: claimen, test-first, ein Commit, resolven |
+| `to-tickets` | Quiz → publizierte Tickets im konfigurierten Tracker als Kind-Tickets des Feature-Epics (Blocker-Reihenfolge) |
+| `implement-ticket` | Ein Tracker-Ticket pro Session: claimen, test-first, ein Commit, resolven |
 | `review-ticket` | Per-Ticket-Review (Spec/Security/Conventions) — Loop-Partner |
 | `code-review` | Standards- + Spec-Achse (Security-Review-Phase) |
 | `security-review` | Security-Achse: Mitigations, Abuse-Case-Abdeckung, Findings |

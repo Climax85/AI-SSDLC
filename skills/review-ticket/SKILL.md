@@ -10,8 +10,9 @@ Du bist die Reviewer-Achse des Umsetzungs-Loops und läufst **nach** `implement-
 Ground rules:
 
 - Pfade ausschließlich aus der STATUS.md-„Pfade"-Tabelle.
-- Lesen: STATUS.md, Ticket-File, nur was das Ticket referenziert (`spec.md`, `threat-model.md`), `CONVENTIONS.md` am Repo-Root, der Diff. Nie „das Repo".
-- Schreiben: nur Ticket-File und `findings.md` — plus die eine Ausnahme in §2 (Conventions-Template kopieren). Nie sonstwo.
+- Lesen: STATUS.md, das Ticket (per Adapter — lokal: Ticket-Datei; GitHub/GitLab: Issue), nur was das Ticket referenziert (`spec.md`, `threat-model.md`), `CONVENTIONS.md` am Repo-Root, der Diff. Nie „das Repo".
+- Schreiben: nur das Ticket (Kommentar und Status per Adapter) und `findings.md` — plus die eine Ausnahme in §2 (Conventions-Template kopieren). Nie sonstwo.
+- `docs/agents/feature-operations.md` definiert, wie das Ticket gelesen, kommentiert und statusgesetzt wird (lokal: Datei; GitHub/GitLab: Issue).
 - Stop-Regeln sind **hard stops**: halte an, melde `verdict: stop` (§5), improvisiere nicht.
 
 ## 1. Input & Diff-Quelle
@@ -43,7 +44,7 @@ Klassifikation ist Pflicht:
 
 Schreiben:
 
-- **must-fix** → Ticket-Kommentar `## Review-Runde n (Commit <hash>)` mit nummerierten Items (`1.`, `2.`, … je mit Fundstelle `Datei:Zeile`), dann `Status: ready-for-agent`.
+- **must-fix** → Ticket-Kommentar `## Review-Runde n (Commit <hash>)` mit nummerierten Items (`1.`, `2.`, … je mit Fundstelle `Datei:Zeile`), dann Ticket-Status per Adapter auf `ready-for-agent` setzen (lokal: `Status:`-Zeile; GitHub/GitLab: Label).
 - **note** → `findings.md`, Tabelle `## Review-Notes (review-ticket)`, ID `RV-nn` fortlaufend, Spalten wie die SF-Tabelle (`RV-nn | Referenz | Fundstelle | Risiko | Empfehlung | Status`), Status `offen`. Im Ticket-Kommentar nur ein Zeiler: `Note RV-nn in findings.md`.
 - **Keine Befunde** → Ticket-Kommentar `Review-Runde n (<hash>): clean, Achsen A/B/C geprüft.` (Voll-Review) bzw. offene Items abhaken (Re-Check).
 
