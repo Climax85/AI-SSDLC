@@ -103,6 +103,7 @@ ID-Konsistenz: IDs sind feature-lokal und bleiben über Spec, Artefakte, Tickets
 
 - `.scratch/<feature>/STATUS.md` ist der maschinenlesbare Ersatz für Konversationskontext: aktuelle Phase, fertige Artefakte mit Pfaden, offene Entscheidungen, Ticket-Referenz, Profil (klein/groß).
 - Jede Phase aktualisiert STATUS.md als letzten Schritt (Teil der DoD-Checkliste).
+- **Ein Kontextfenster pro Statuswechsel:** Jeder Phasenübergang beendet die Session; der nächste Schritt startet in einem frischen Kontext und setzt an STATUS.md an (`secure-feature` §5). HITL-Warten *innerhalb* einer Phase (z. B. Grilling-Runden) ist kein Statuswechsel — die Session läuft dort weiter.
 - Feature-Eingang: Freitext **oder** Ticket-Referenz über den konfigurierten Tracker-Adapter. Bei Ticket-Referenz gilt die Ticketnummer als Feature-Name und die referenzierte Ticket **ist** das Feature-Epic; der Adapter ist konfigurierbar, Referenz-Implementierung ist Local-Markdown (siehe `issue-tracker.md`).
 
 ## 7. Anwendungsdokumentation

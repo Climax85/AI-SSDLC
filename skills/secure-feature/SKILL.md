@@ -13,6 +13,7 @@ Ground rules:
 - You read and write only the current phase's artifacts, strictly in template format.
 - References exclusively as artifact IDs (`REQ-nn` schema).
 - Stop rules in the templates are **hard stops**: halt the workflow, leave the decision to the human, record it as an open decision in STATUS.md.
+- **One context window per status change.** Every phase transition ends the session: the phase's STATUS.md update is its last act, then stop and hand back to the developer. The next step starts in a **fresh session**, resumes from STATUS.md (§5) and does nothing else. HITL waits *within* a phase (e.g. grilling rounds) are not status changes — the session continues there.
 
 ## 1. Intake
 
@@ -35,7 +36,7 @@ Ground rules:
 
 ## 4. Phases
 
-Order: `Spezifizieren → Threat-Model → Testfälle → Umsetzung → Security-Review → Gemergt`. Every phase ends with the STATUS.md update as its last DoD step.
+Order: `Spezifizieren → Threat-Model → Testfälle → Umsetzung → Security-Review → Gemergt`. Every phase ends with the STATUS.md update as its last DoD step and **stops the session** (one context window per status change, ground rules).
 
 ### Spezifizieren
 
@@ -45,7 +46,7 @@ Branch by profile; the artifact set is the destination either way.
 
 **Profile `groß`:** Plan with `wayfinder` first — call it with the feature as the loose idea and the artifact set (incl. `use-cases.md`, ADRs) as the destination. The map is a planning aid, **not** a replacement for the artifacts. The **security frontier is mandatory**: the map must ticket, graduate from fog, or resolve at least — abuse cases, assets/trust boundaries, security requirements (REQ security flag), security-relevant acceptance criteria. You propose, the human confirms (per template rules; nothing is asked empty). Work the map one ticket per session; the phase label stays `Spezifizieren`, record the map reference and open tickets in STATUS.md "Historie". When the way is clear, fill the artifacts from the map, then call "grilling" and "domain-modeling" (CONTEXT.md; ADRs) for what the map left open. Reconcile per `docs/agents/artefakt-erweiterung-to-spec-to-tickets.md` §3 step 0 (first writer) — never duplicate existing rows. `wayfinder` not installed → fall back to breadth-first grilling rounds covering the same mandatory security frontier.
 
-DoD: all artifacts of the phase `fertig`; each artifact's coverage rules from its template satisfied; no open decisions left; (`groß`) map resolved or its remaining tickets linked in STATUS.md.
+DoD: all artifacts of the phase `fertig`; each artifact's coverage rules from its template satisfied; no open decisions left; (`groß`) map resolved or its remaining tickets linked in STATUS.md. **Last DoD step: stop the session** — `Feature-Epic` starts in a fresh context.
 
 ### Feature-Epic (nach Spezifizieren, vor Threat-Model)
 
@@ -57,13 +58,13 @@ Create the **feature epic** in the configured tracker (see `docs/agents/feature-
 
 Later phases append condensed results (Threat-Model core with high risks, Security-Review findings); the final condensed write-back is `Gemergt`'s `ticket-update.md`. Materialize the epic reference in STATUS.md "Historie".
 
-DoD: epic exists in the tracker and is referenced from STATUS.md; intake-by-reference repos reuse the referenced ticket.
+DoD: epic exists in the tracker and is referenced from STATUS.md; intake-by-reference repos reuse the referenced ticket. **Last DoD step: stop the session** — `Threat-Model` starts in a fresh context.
 
 ### Threat-Model
 
 Call the `threat-model` skill; it reads its own inputs from STATUS.md.
 
-DoD: `threat-model.md` `fertig`; the "Neue Schnittstellen/Datenflüsse" and "Betriebsrelevante Festlegungen" sections confirmed by the human.
+DoD: `threat-model.md` `fertig`; the "Neue Schnittstellen/Datenflüsse" and "Betriebsrelevante Festlegungen" sections confirmed by the human. **Last DoD step: stop the session** — `Testfälle` starts in a fresh context.
 
 ### Testfälle
 
@@ -92,7 +93,7 @@ DoD: all tickets `resolved` with their PRs merged into the integration branch; t
 - **Accept:** record as `akzeptiert (<Begründung, durch wen>)` in `findings.md` and STATUS.md.
 - **Artifact-level amendments** (e.g. an `IF-nn` row, an AK Lesart) are made directly in the artifact, not as tickets.
 
-While the loop runs, the phase label stays `Security-Review`. After the last fix ticket: re-run the affected review walks against the new diff and the full suite once; then close the phase.
+While the loop runs, the phase label stays `Security-Review`. After the last fix ticket: **stop the session** — the re-run of the affected review walks against the new diff and the full suite happens in a fresh session; green and clean → DoD satisfied.
 
 DoD: every finding `behoben` or `akzeptiert` with reasoning and risk rating in STATUS.md; for fixes: full suite green and the re-run walks clean.
 
@@ -104,7 +105,7 @@ DoD: application docs merged, committed and ticket updated, phase = `Gemergt`; t
 
 ## 5. Continuing with empty context
 
-First step of every session: read `STATUS.md`. Then:
+Every phase boundary is a session boundary (ground rules): a fresh session starts any phase, not just `Umsetzung`. First step of every session: read `STATUS.md`. Then:
 
 1. "Offene Entscheidungen" not empty → clarify these with the human first.
 2. `Artefakt-Status` of the current phase: catch up open artifacts in template order; continue an `entwurf` where it stands.
